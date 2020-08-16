@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:weightSum="1"
+
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.05"></TextView>
+
+    <TextView
+        android:id="@+id/beer_item_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.4"
+        android:gravity="left|center_vertical"
+        android:text=""
+        android:textSize="15sp"
+        android:maxLines="1"
+        android:maxLength="15"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/beer_item_tagline"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.6"
+        android:textSize="13sp"
+        android:layout_gravity="center"
+        android:maxLines="1"
+        android:gravity="left|center_vertical"
+        android:text="NEW\nCASES"/>
+
+</LinearLayout>

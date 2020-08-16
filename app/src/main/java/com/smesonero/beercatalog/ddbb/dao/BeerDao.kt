@@ -19,10 +19,15 @@ interface BeerDao{
     @Insert
     fun insert (vararg beers :DbBeer)
 
-
     @Query("SELECT * FROM DbFoodPairing WHERE idBeer = :id ")
     fun getFoodPairingsById(id:String): List<DbFoodPairing>
 
     @Insert
     fun insertPairing (vararg pairing :DbFoodPairing)
+
+    @Query("SELECT * FROM DbBeer WHERE id = :id ")
+    fun getBeerById(id:String): DbBeer
+
+    @Query("UPDATE dbbeer SET available=:available WHERE id = :id")
+    fun update(available:Boolean, id: Int)
 }

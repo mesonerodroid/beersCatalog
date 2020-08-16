@@ -4,15 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.FirstFragment">
+    tools:context=".ui.fragments.BeersListFragment">
+
+    <ProgressBar
+        android:id="@+id/beer_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="238dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ProgressBar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerBeers"
         android:layout_width="0dp"
         android:layout_height="582dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="41dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

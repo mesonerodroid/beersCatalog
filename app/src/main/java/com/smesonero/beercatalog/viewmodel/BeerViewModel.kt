@@ -2,9 +2,8 @@ package com.smesonero.beercatalog.viewmodel
 
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
+import com.smesonero.beercatalog.domain_model.Beer
 import com.smesonero.beercatalog.service.BeerRepository
 import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
@@ -15,13 +14,28 @@ class BeerViewModel @ViewModelInject constructor(
 
 ) : ViewModel(), LifecycleObserver{
 
-    val beerLiveData = liveData(Dispatchers.IO) {
-        try{
-            val beers = repository.getBeers()
-            Log.e("VIEWMODEL", "emit beers "+beers.size)
-            emit(beers)
-        }catch (e:Exception){
-            e.printStackTrace()
+
+    lateinit var beerLiveData: LiveData<List<Beer>>
+
+    fun getLiveData() {
+        beerLiveData = liveData(Dispatchers.IO) {
+            try {
+                val beers = repository.getBeers()
+                emit(beers)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
         }
     }
+    fun giveMeBeerById(id: Int): Beer {
+        return repository.getBeerById(id)
+    }
+
+    fun updateAvailable(beer: Beer, available: Boolean) {
+
+        repository.updateBeer(beer, available)
+    }
+
+    val selectedBeerLiveData = MutableLiveData<Beer>()
 }

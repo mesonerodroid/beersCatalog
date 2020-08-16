@@ -17,16 +17,14 @@ class BeerRepository @Inject constructor(beerDao: BeerDao){
 
     suspend fun getBeers(): List<Beer>
     {
-        Log.e("REPO", "getBeers, emptydatabase: "+emptyDatabase());
         if (emptyDatabase()) {
             try {
                 var firstPage = client.getFirstPage().body()
-                Log.e("BEERREPO", "Obtenida first page " + firstPage)
+                Log.e("BEERREPO", "Obt  first page " + firstPage)
                 var secondPage = client.getSecondPage().body()
-                Log.e("BEERREPO", "Obtenida second page " + secondPage)
+                Log.e("BEERREPO", "Obt second page " + secondPage)
 
                 var list: List<Beer> = generateList(firstPage, secondPage)
-                Log.e("repo", "Listgen : "+list)
                 insertBeers(list)
 
             } catch (e: Exception) {
@@ -39,7 +37,7 @@ class BeerRepository @Inject constructor(beerDao: BeerDao){
 
     private fun obtainFromBd(): List<Beer> {
 
-        Log.e("repo", "OBTAIN FRom bd")
+
         var listRet = mutableListOf<Beer>()
         var beersDb = beerDao.getAll()
 
@@ -53,8 +51,6 @@ class BeerRepository @Inject constructor(beerDao: BeerDao){
                 listPairingDb.forEach{
                     listPairing.add(it.pairingText)
                 }
-
-                Log.e("REPO", "list Pairing para id "+it.id + " es "+listPairing.toString());
 
                 var beer= Beer(
                     it.id,
@@ -71,14 +67,13 @@ class BeerRepository @Inject constructor(beerDao: BeerDao){
             }
         }
         else{
-            Log.e("repo", "OBTAIN FRom bd, vacio")
+            Log.e("repo", "OBTAIN FRom bd, empty")
         }
         return listRet.toList()
     }
 
     private fun insertBeers(list: List<Beer>) {
 
-        Log.e("repo", "Insert: "+list.size)
         list.forEach{
             var beerId = it.id
             var dbBeer = DbBeer(
@@ -112,12 +107,12 @@ class BeerRepository @Inject constructor(beerDao: BeerDao){
     }
 
     private fun generateList(firstPage: List<WsBeer>?, secondPage: List<WsBeer>?): List<Beer> {
-        Log.e("repo", "gen Listgen ")
+
         var list : MutableList<Beer> = mutableListOf()
         if(firstPage!=null && firstPage.size>0){
             firstPage.toList().forEach{
 
-                Log.e("repo", "foodpairing : "+it.food_pairing)
+
                 var beer = Beer(
                     it.id ,
                     it.name ?: "",
@@ -148,7 +143,31 @@ class BeerRepository @Inject constructor(beerDao: BeerDao){
                 list.add(beer)
             }
         }
-        Log.e("repo", "Listgenerated : "+list.toList())
         return list.toList();
+    }
+
+    fun getBeerById(idBeer: Int): Beer {
+        var it = beerDao.getBeerById(idBeer.toString())
+        var listPairingDb = beerDao.getFoodPairingsById(it.id.toString())
+
+        var listPairing = mutableListOf<String>()
+        listPairingDb.forEach{
+            listPairing.add(it.pairingText)
+        }
+        return Beer(
+            it.id ,
+            it.name ?: "",
+            it.tagline ?: "",
+            it.description ?: "",
+            it.image_url ?: "",
+            it.abv ?: "",
+            it.ibu ?: "",
+            listPairing ?: listOf(),
+            it.available
+        )
+    }
+
+    fun updateBeer(beer: Beer, available: Boolean) {
+        beerDao.update(available, beer.id)
     }
 }
